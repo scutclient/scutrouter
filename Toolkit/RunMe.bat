@@ -1,6 +1,6 @@
 @echo off & setlocal enabledelayedexpansion
 
-set /A routerPasswd=admin
+set routerPasswd=admin
 
 echo.&echo.
 echo 本脚本由#华工路由器群#提供
@@ -70,9 +70,9 @@ IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto _FAIL )
 
 call telnet.vbs
 
-echo y|pscp -scp -P 22 -pw admin  -r ./setup_ipk root@192.168.1.1:/tmp/ | findstr 100% && echo OK || echo NO
+echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./setup_ipk root@192.168.1.1:/tmp/ | findstr 100% && echo OK || echo NO
 
-echo y|plink -m commands.sh -P 22 -pw admin root@192.168.1.1
+echo y|plink -m commands.sh -P 22 -pw %routerPasswd% root@192.168.1.1
 
 goto _EXIT
 
