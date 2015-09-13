@@ -30,7 +30,7 @@ checkIP.bat %IPaddress%|findstr error && goto _MAC_OK || goto _IP_OK
 set /p Mask=填写学校给你的子网掩码（MASK）  
 checkIP.bat %Mask%|findstr error && goto _IP_OK || goto _MASK_OK
 :_MASK_OK
-set /p Gateway=填写学校给你的网关地址
+set /p Gateway=填写学校给你的网关地址  
 checkIP.bat %Gateway%|findstr error && goto _IP_OK || goto _GATEWAY_OK
 :_GATEWAY_OK
 echo uci set system.@system[0].hostname=SCUT > commands.sh
@@ -74,7 +74,7 @@ echo y|pscp -scp -P 22 -pw admin  -r ./setup_ipk root@192.168.1.1:/tmp/ | findst
 
 echo y|plink -m commands.sh -P 22 -pw admin root@192.168.1.1
 
-
+goto _EXIT
 
 :_FAIL
 echo 电脑与路由没连通，请检查
