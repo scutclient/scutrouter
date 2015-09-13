@@ -1,89 +1,120 @@
-@echo off & setlocal enabledelayedexpansion
+ï»¿@echo off & setlocal enabledelayedexpansion
+
+>nul 2>&1 cacls.exe "%SYSTEMROOT%\system32\config\system"
+
+if '%errorlevel%' NEQ '0' (
+    echo è¯·æ±‚ç®¡ç†å‘˜æƒé™...
+    getadmin.vbs %0 %1
+	exit /B
+)
+:gotAdmin
+pushd "%CD%"
+CD /D "%~dp0"
 
 set routerPasswd=admin
 
 echo.&echo.
-echo ±¾½Å±¾ÓÉ#»ª¹¤Â·ÓÉÆ÷Èº#Ìá¹©
-echo ×¢Òâ£ºÁ¬½ÓÄ¬ÈÏÃÜÂëÎª%routerPasswd%
+echo æœ¬è„šæœ¬ç”±#åå·¥è·¯ç”±å™¨ç¾¤#æä¾›
+echo æ³¨æ„ï¼šè¿æ¥é»˜è®¤å¯†ç ä¸º%routerPasswd%
 echo.&echo.
-echo ÊäÈëÄãµÄ³£ÓÃĞÅÏ¢
-set /p User=²¦ºÅÓÃµÄÓÃ»§Ãû  
-set /p Password=²¦ºÅÓÃµÄÃÜÂë  
-set /p Key=ÄãµÄWIFIÃÜÂë  
+echo è¾“å…¥ä½ çš„å¸¸ç”¨ä¿¡æ¯
+set /p User=æ‹¨å·ç”¨çš„ç”¨æˆ·å  
+set /p Password=æ‹¨å·ç”¨çš„å¯†ç   
+set /p Key=ä½ çš„WIFIå¯†ç   
 :MAC_LOOP
 echo.&echo.
 set /A N=0
 for /f "skip=1 tokens=1,* delims= " %%a in ('wmic nic where ^(adaptertype like "ethernet ___._" and netconnectionstatus^="2"^) get name^,macaddress') do ( if "%%b" == "" ( @echo off ) else (set /A N+=1&set _!N!MAC=%%a&call echo.[!N!] %%b %%a) )
 set /A N+=1
-echo [%N%] ²»ÊÇ±¾ÈËµçÄÔ£¬ÎÒÒªÌîÆäËûMAC£¬ÒªÇĞÓ¢ÎÄ×´Ì¬ÊäÈë·¨ÊäÈë£¨¸ñÊ½´óĞ´×ÖÄ¸XX:XX:XX:XX:XX:XX)
+echo [%N%] ä¸æ˜¯æœ¬äººç”µè„‘ï¼Œæˆ‘è¦å¡«å…¶ä»–MACï¼Œè¦åˆ‡è‹±æ–‡çŠ¶æ€è¾“å…¥æ³•è¾“å…¥ï¼ˆæ ¼å¼å¤§å†™å­—æ¯XX:XX:XX:XX:XX:XX)
 echo.&echo.
-set /p input=Ñ¡ÔñÄã±¾ÈËµçÄÔµÄÓĞÏßÍø¿¨:
+set /p input=é€‰æ‹©ä½ æœ¬äººç”µè„‘çš„æœ‰çº¿ç½‘å¡:
 IF %input% EQU %N% (goto DIY_MAC) ELSE (set MACaddress=!_%input%MAC! & goto MAC_END)
 :DIY_MAC
-set /p MACaddress=ÌîĞ´ÄãÌá¹©¸øÑ§Ğ£µÄMACµØÖ·  
+set /p MACaddress=å¡«å†™ä½ æä¾›ç»™å­¦æ ¡çš„MACåœ°å€  
 :MAC_END
 checkMAC.bat %MACaddress%|findstr error && goto MAC_LOOP || goto _MAC_OK
 :_MAC_OK
-set /p IPaddress=ÌîĞ´Ñ§Ğ£¸øÄãµÄIPµØÖ·  
+set /p IPaddress=å¡«å†™å­¦æ ¡ç»™ä½ çš„IPåœ°å€  
 checkIP.bat %IPaddress%|findstr error && goto _MAC_OK || goto _IP_OK
 :_IP_OK
-set /p Mask=ÌîĞ´Ñ§Ğ£¸øÄãµÄ×ÓÍøÑÚÂë£¨MASK£©  
+set /p Mask=å¡«å†™å­¦æ ¡ç»™ä½ çš„å­ç½‘æ©ç ï¼ˆMASKï¼‰  
 checkIP.bat %Mask%|findstr error && goto _IP_OK || goto _MASK_OK
 :_MASK_OK
-set /p Gateway=ÌîĞ´Ñ§Ğ£¸øÄãµÄÍø¹ØµØÖ·  
+set /p Gateway=å¡«å†™å­¦æ ¡ç»™ä½ çš„ç½‘å…³åœ°å€  
 checkIP.bat %Gateway%|findstr error && goto _IP_OK || goto _GATEWAY_OK
 :_GATEWAY_OK
-echo uci set system.@system[0].hostname=SCUT > commands.sh
-echo uci set system.@system[0].timezone=HKT-8 >> commands.sh
-echo uci set system.@system[0].zonename=Asia/Hong Kong >> commands.sh
-echo uci set network.wan.macaddr=%MACaddress% >> commands.sh
-echo uci set network.wan.proto=static >> commands.sh
-echo uci set network.wan.ipaddr=%IPaddress%  >> commands.sh
-echo uci set network.wan.netmask=%Mask%  >> commands.sh
-echo uci set network.wan.gateway=%Gateway% >> commands.sh
-echo uci set network.wan.dns=202.112.17.33 114.114.114.114 >> commands.sh
-echo uci set wireless.@wifi-device[0].disabled=0  >> commands.sh
-echo uci set wireless.@wifi-iface[0].mode=ap  >> commands.sh
-echo uci set wireless.@wifi-iface[0].ssid=QQgroup:262939451   >> commands.sh
-echo uci set wireless.@wifi-iface[0].encryption=psk2  >> commands.sh
-echo uci set wireless.@wifi-iface[0].key=%Key%   >> commands.sh
-echo uci commit  >> commands.sh
-echo opkg install /tmp/setup_ipk/libpcap_1.3.0-1_ar71xx.ipk >> commands.sh
-echo opkg install /tmp/setup_ipk/scutclient_1.3-1_ar71xx.ipk >> commands.sh
-echo echo sleep 30 ^> /etc/rc.local >> commands.sh
-echo echo scutclient %User% %Password% ^& ^> /etc/rc.local >> commands.sh
-echo echo exit 0 ^> /etc/rc.local >> commands.sh
-echo 01 06 * * 1-5 killall scutclient ^> /etc/crontabs/root >> commands.sh
-echo 02 06 * * 1-5 scutclient %User% %Password% ^& ^> /etc/crontabs/root >> commands.sh
-echo 00 12 * * 0-7 ntpd ¨Cn ¨Cd ¨Cp s2g.time.edu.cn ^> /etc/crontabs/root >> commands.sh
+echo opkg install /tmp/setup_ipk/libpcap_1.3.0-1_ar71xx.ipk >> .\setup_ipk\commands.sh
+echo opkg install /tmp/setup_ipk/libpcap_1.3.0-1_ar71xx.ipk >> .\setup_ipk\commands.sh
+echo opkg install /tmp/setup_ipk/scutclient_1.3-1_ar71xx.ipk >> .\setup_ipk\commands.sh
+echo opkg install /tmp/setup_ipk/luci-app-scutclient_svn-r9961-1_ar71xx.ipk >> .\setup_ipk\commands.sh
+echo uci set system.@system[0].hostname=SCUT > .\setup_ipk\commands.sh
+echo uci set system.@system[0].timezone=HKT-8 >> .\setup_ipk\commands.sh
+echo uci set system.@system[0].zonename='Asia/Hong Kong' >> .\setup_ipk\commands.sh
+echo uci set network.wan.macaddr=%MACaddress% >> .\setup_ipk\commands.sh
+echo uci set network.wan.proto=static >> .\setup_ipk\commands.sh
+echo uci set network.wan.ipaddr=%IPaddress%  >> .\setup_ipk\commands.sh
+echo uci set network.wan.netmask=%Mask%  >> .\setup_ipk\commands.sh
+echo uci set network.wan.gateway=%Gateway% >> .\setup_ipk\commands.sh
+echo uci set network.wan.dns='202.112.17.33 114.114.114.114' >> .\setup_ipk\commands.sh
+echo uci set wireless.@wifi-device[0].disabled=0  >> .\setup_ipk\commands.sh
+echo uci set wireless.@wifi-iface[0].mode=ap  >> .\setup_ipk\commands.sh
+echo uci set wireless.@wifi-iface[0].ssid=QQgroup:262939451   >> .\setup_ipk\commands.sh
+echo uci set wireless.@wifi-iface[0].encryption=psk2  >> .\setup_ipk\commands.sh
+echo uci set wireless.@wifi-iface[0].key=%Key%   >> .\setup_ipk\commands.sh
+echo uci set scutclient.@option[0].boot=1   >> .\setup_ipk\commands.sh
+echo uci set scutclient.@option[0].enable=1   >> .\setup_ipk\commands.sh
+echo uci set scutclient.@scutclient[0]=scutclient   >> .\setup_ipk\commands.sh
+echo uci set scutclient.@scutclient[0].interface=$(uci get network.wan.interface) >> .\setup_ipk\commands.sh
+echo uci set scutclient.@scutclient[0].username=%User%   >> .\setup_ipk\commands.sh
+echo uci set scutclient.@scutclient[0].password=%Password%   >> .\setup_ipk\commands.sh
+echo uci commit  >> .\setup_ipk\commands.sh
+echo echo sleep 30 ^> /etc/rc.local >> .\setup_ipk\commands.sh
+echo echo scutclient %User% %Password% \^& ^>^> /etc/rc.local >> .\setup_ipk\commands.sh
+echo echo sleep 30 ^>^> /etc/rc.local >> .\setup_ipk\commands.sh
+echo echo ntpd â€“n â€“d â€“p s2g.time.edu.cn ^>^> /etc/rc.local >> .\setup_ipk\commands.sh
+echo echo exit 0 ^>^> /etc/rc.local >> commands.sh
+echo echo 01 06 * * 1-5 killall scutclient ^> /etc/crontabs/root >> .\setup_ipk\commands.sh
+echo echo 02 06 * * 1-5 scutclient %User% %Password% \^& ^>^> /etc/crontabs/root >> .\setup_ipk\commands.sh
+echo echo 00 12 * * 0-7 ntpd â€“n â€“d â€“p s2g.time.edu.cn ^>^> /etc/crontabs/root >> .\setup_ipk\commands.sh
+
+echo æç¤ºï¼šå·²ç»ç”Ÿæˆopenwrtå‘½ä»¤æ‰§è¡Œæ–‡ä»¶commands.sh
 pause
-
-echo ÌáÊ¾£º½«ÄãÁ¬½ÓÂ·ÓÉµÄÍø¿¨ÉèÖÃIPÎª192.168.1.X
-ChangeIP.bat 3
-echo ÌáÊ¾£ºÒÑ¾­½«ÄãÁ¬½ÓÂ·ÓÉµÄÍø¿¨ÉèÖÃIPÎª192.168.1.X
-
+echo æç¤ºï¼šå°†ä½ è¿æ¥è·¯ç”±çš„ç½‘å¡è®¾ç½®IPä¸º192.168.1.X
+pause
+call ChangeIP.bat 3
+echo æç¤ºï¼šå·²ç»å°†ä½ è¿æ¥è·¯ç”±çš„ç½‘å¡è®¾ç½®IPä¸º192.168.1.X
+pause
 :_PING
 ping 192.168.1.1
 IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto _FAIL )
-
+pause
 :_CONTINUE
-
+echo æç¤ºï¼šå‡†å¤‡telnetè·¯ç”±å¼€é€šSSHï¼ŒæŠŠå¯†ç æ”¹ä¸º%routerPasswd%
+pause
 call telnet.vbs
-
+echo æç¤ºï¼šå‡†å¤‡ä¼ é€setup_ipkæ–‡ä»¶å¤¹åˆ°è·¯ç”±çš„/tmp/ä¸‹é¢
+pause
 echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./setup_ipk root@192.168.1.1:/tmp/ | findstr 100% && echo OK || echo NO
-
+echo æç¤ºï¼šå‡†å¤‡åœ¨è·¯ç”±æ‰§è¡Œcommands.shè„šæœ¬
+pause
 echo y|plink -m commands.sh -P 22 -pw %routerPasswd% root@192.168.1.1
-
+echo æç¤ºï¼šè‡ªåŠ¨é…ç½®æˆåŠŸï¼Œè¯·æ‹”ç”µé‡å¯è·¯ç”±
+pause
 goto _EXIT
 
 :_FAIL
-echo µçÄÔÓëÂ·ÓÉÃ»Á¬Í¨£¬Çë¼ì²é
-echo 1.Â·ÓÉÃ»Í¨µç
-echo 2.ÍøÏßËÉÁË£¬»µÁËÖÊÁ¿²»¹ı¹Ø
-echo 3.Â·ÓÉÊÇ»µµÄ
-echo µÈÈºÖ÷²¹³ä
+echo ç”µè„‘ä¸è·¯ç”±æ²¡è¿é€šï¼Œè¯·æ£€æŸ¥
+echo 1.è·¯ç”±æ²¡é€šç”µ
+echo 2.ç½‘çº¿æ¾äº†ï¼Œåäº†è´¨é‡ä¸è¿‡å…³
+echo 3.è·¯ç”±æ˜¯åçš„
+echo ç­‰ç¾¤ä¸»è¡¥å……
+pause
 goto _EXIT
 
 :_EXIT
-echo.  > commands.sh
+echo.  > .\setup_ipk\commands.sh
+call ChangeIP.bat 2
+echo æç¤ºï¼šå·²ç»æ¸…é™¤æ•æ„Ÿä¿¡æ¯ï¼Œç”µè„‘ipæ”¹ä¸ºè‡ªåŠ¨è·å¾—
+pause
 exit

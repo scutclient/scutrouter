@@ -1,13 +1,5 @@
 @echo off & setlocal enabledelayedexpansion
-
->nul 2>&1 cacls.exe "%SYSTEMROOT%\system32\config\system"
-
-if '%errorlevel%' NEQ '0' (
-    echo 请求管理员权限...
-    getadmin.vbs %0
-    exit /B
-)
-:gotAdmin
+echo     修改不成功的话，请右键以管理员运行
 set /A N=0
 echo.
 for /f "skip=1 tokens=1,* delims= " %%a in ('wmic nic where ^(adaptertype like "ethernet ___._" and netconnectionstatus^="2"^) get name^,Index') do ( if "%%b" == "" ( @echo off ) else (set /A N+=1&set _!N!INDEX=%%a&call echo.[!N!]  %%b Index=%%a) )
@@ -35,7 +27,8 @@ exit
 set /p yourAddress=填写你提供给学校的IP地址  
 set /p yourMask=填写你提供给学校的子网源码
 set /p yourGateway=填写你提供给学校的网关地址  
-wmic nicconfig where index=%_index% call enablestatic(%yourAddress%),(%yourMask%)
+wmic nicconfig where index=%_index% call enablestatic "%yourAddress%","%yourMask%"
+wmic nicconfig where index=%_index% call enablestatic(%yourAddress%)
 wmic nicconfig where index=%_index% call setgateways(%yourGateway%),(1)
 wmic nicconfig where index=%_index% call SetDNSServerSearchOrder(202.112.17.33,114.114.114.114)
 exit
@@ -43,6 +36,6 @@ exit
 wmic nicconfig where index=%_index% call enabledhcp
 exit
 :_ChangeIP3
-wmic nicconfig where index=%_index% call enablestatic(192.168.1.111),(255.255.255.0)
+wmic nicconfig where index=%_index% call enablestatic "192.168.1.11","255.255.255.0"
 wmic nicconfig where index=%_index% call setgateways(192.168.1.1),(1)
 wmic nicconfig where index=%_index% call SetDNSServerSearchOrder(202.112.17.33,114.114.114.114)
