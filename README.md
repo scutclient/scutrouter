@@ -12,3 +12,10 @@ SCUTrouter一键配置脚本
 --------
 
 双击Toolkit中的RunMe.bat运行
+
+更多新手教程
+--------
+关于华南理工大学路由器使用的指引文档
+本教程基于openwrt官方标准固件，其他的openrouter、潘多拉分支不包孕
+设置过程中严格按照教程操作，不允许在正式群提不必要的问题，教程没提到的一律不需要问
+新手基础知识点[这里](https://github.com/helijia21/scutrouter/wiki)
