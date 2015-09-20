@@ -69,6 +69,7 @@ echo opkg install /tmp/setup_ipk/*.ipk>> .\setup_ipk\commands.sh
 echo uci set system.@system[0].hostname='SCUT'>> .\setup_ipk\commands.sh
 echo uci set system.@system[0].timezone='HKT-8'>> .\setup_ipk\commands.sh
 echo uci set system.@system[0].zonename='Asia/Hong Kong'>> .\setup_ipk\commands.sh
+echo uci set luci.languages.zh_cn='chinese'>> .\setup_ipk\commands.sh
 echo uci set network.wan.macaddr='%MACaddress%'>> .\setup_ipk\commands.sh
 echo uci set network.wan.proto='static'>> .\setup_ipk\commands.sh
 echo uci set network.wan.ipaddr='%IPaddress%'>> .\setup_ipk\commands.sh
@@ -102,9 +103,11 @@ pause
 echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./setup_ipk root@192.168.1.1:/tmp/ | findstr 100% && echo OK || goto _FAIL
 echo 提示：准备在路由执行commands.sh脚本
 pause
-echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "rm -f /etc/rc.local && rm -f /etc/crontabs/root && sed -i 's/\r//g;' /tmp/setup_ipk/commands.sh && chmod 755 /tmp/setup_ipk/commands.sh && /tmp/setup_ipk/commands.sh"
-echo 提示：自动配置成功，请现在去拔路由器电源然后再插上(重启路由)
+echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/setup_ipk/commands.sh && chmod 755 /tmp/setup_ipk/commands.sh && /tmp/setup_ipk/commands.sh"
+echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等如下网页能访问就代表启动完成了
+echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause
+explorer  "http://192.168.1.1/cgi-bin/luci/admin/network/scutclient"
 goto _EXIT
 
 :_FAIL
@@ -121,13 +124,13 @@ goto _EXITFAIL
 cd.>.\setup_ipk\commands.sh
 echo 提示：已经清除敏感信息
 pause
-echo 现在路由器还在启动中，等启动完全就可以自动上网了，大概3到5分钟内你的电脑就能上网了
-pause
 echo 按任意键结束本次设置过程，窗口自动关掉，或者等能上网了再关掉也行
 pause
 exit
 
 :_EXITFAIL
 echo 有时候设置失败退出脚本重新来一次试试，不行就按新手教程指引刷固件
+cd.>.\setup_ipk\commands.sh
+echo 提示：已经清除敏感信息
 pause
 exit
