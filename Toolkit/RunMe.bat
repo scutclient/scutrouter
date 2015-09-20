@@ -107,7 +107,7 @@ echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/s
 echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等如下网页能访问就代表启动完成了
 echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause
-explorer  "http://192.168.1.1/cgi-bin/luci/admin/network/scutclient"
+explorer  "http://192.168.1.1/cgi-bin/luci/admin/scut/scut"
 goto _EXIT
 
 :_FAIL
