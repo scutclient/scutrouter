@@ -15,13 +15,15 @@ call ChangeIP.bat 2
 echo 提示：已经将你连接路由的网卡设置IP，DNS为自动获得
 pause
 :_PING
-echo.
 ping OpenWrt
 IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto NO_OPENWRT )
 pause
 :NO_OPENWRT
 echo 该系统可能为非OPENWRT官方系统（或者是不是用OpenWrt做主机名），不适宜继续执行脚本，如果已经确定是OpenWrt系统可以继续
 pause
+echo.
+ping -a 192.168.1.1
+IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto _FAIL )
 :_CONTINUE
 echo 输入你的上网信息，每项信息输入后按回车即可下一步操作
 set /p User=拨号用的用户名(其实就是学号)：  
