@@ -1,11 +1,11 @@
 @echo off & setlocal enabledelayedexpansion
-echo     ĞŞ¸Ä²»³É¹¦µÄ»°£¬ÇëÓÒ¼üÒÔ¹ÜÀíÔ±ÔËĞĞ
+echo     ä¿®æ”¹ä¸æˆåŠŸçš„è¯ï¼Œè¯·å³é”®ä»¥ç®¡ç†å‘˜è¿è¡Œ
 set /A N=0
 echo.
 for /f "skip=1 tokens=1,* delims= " %%a in ('wmic nic where AdapterTypeId^="0" get name^,Index') do ( if "%%b" == "" ( @echo off ) else (set /A N+=1&set _!N!INDEX=%%a&call echo.[!N!] %%b %%a) )
 echo.
 IF !N! EQU 1 set /A input=1&goto _DEVICE_OK
-set /p input=Ñ¡ÔñÄã±¾ÈËµçÄÔµÄÓĞÏßÍø¿¨
+set /p input=é€‰æ‹©ä½ æœ¬äººç”µè„‘çš„æœ‰çº¿ç½‘å¡:
 :_DEVICE_OK
 set /A _index=!_%input%INDEX!
 
@@ -15,18 +15,18 @@ if "%1"==""  ( goto _ChangeIP ) else ( goto _ChangeIP%1 )
 set var=""
 
 echo.
-echo     [1]×Ô¶¨ÒåIP    [2]×Ô¶¯»ñµÃIP  [3]192.168.1.X
+echo     [1]è‡ªå®šä¹‰IP    [2]è‡ªåŠ¨è·å¾—IP  [3]192.168.1.X
 echo.
-set /p var=ÇëÑ¡Ôñ[1/2/3]:
+set /p var=è¯·é€‰æ‹©[1/2/3]:
 echo.
-if %var%==1 echo ÉèÖÃ¾²Ì¬IP  & goto _ChangeIP1
-if %var%==2 echo ÉèÖÃ×Ô¶¯»ñµÃIP & goto _ChangeIP2
-if %var%==3 echo ÉèÖÃ192.168.1.X & goto _ChangeIP3
+if %var%==1 echo è®¾ç½®é™æ€IP  & goto _ChangeIP1
+if %var%==2 echo è®¾ç½®è‡ªåŠ¨è·å¾—IP & goto _ChangeIP2
+if %var%==3 echo è®¾ç½®192.168.1.X & goto _ChangeIP3
 goto END
 :_ChangeIP1
-set /p yourAddress=ÌîĞ´ÄãÌá¹©¸øÑ§Ğ£µÄIPµØÖ·  
-set /p yourMask=ÌîĞ´ÄãÌá¹©¸øÑ§Ğ£µÄ×ÓÍøÔ´Âë
-set /p yourGateway=ÌîĞ´ÄãÌá¹©¸øÑ§Ğ£µÄÍø¹ØµØÖ·  
+set /p yourAddress=å¡«å†™ä½ æä¾›ç»™å­¦æ ¡çš„IPåœ°å€  
+set /p yourMask=å¡«å†™ä½ æä¾›ç»™å­¦æ ¡çš„å­ç½‘æºç 
+set /p yourGateway=å¡«å†™ä½ æä¾›ç»™å­¦æ ¡çš„ç½‘å…³åœ°å€  
 wmic nicconfig where index=%_index% call enablestatic "%yourAddress%","%yourMask%"
 wmic nicconfig where index=%_index% call enablestatic(%yourAddress%)
 wmic nicconfig where index=%_index% call setgateways(%yourGateway%),(1)
