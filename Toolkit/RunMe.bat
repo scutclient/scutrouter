@@ -8,6 +8,21 @@ echo.&echo =========================================================
 echo 	本脚本由#华工路由器正式群#提供
 echo 	注意：登陆路由器密码必须为%routerPasswd%，否则必然失败
 echo.&echo =========================================================
+echo.
+echo 提示：脚本将会把你连接路由的网卡设置IP，DNS为自动获得
+pause
+call ChangeIP.bat 2
+echo 提示：已经将你连接路由的网卡设置IP，DNS为自动获得
+pause
+:_PING
+echo.
+ping OpenWrt
+IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto NO_OPENWRT )
+pause
+:NO_OPENWRT
+echo 该系统可能为非OPENWRT官方系统（或者是不是用OpenWrt做主机名），不适宜继续执行脚本，如果已经确定是OpenWrt系统可以继续
+pause
+:_CONTINUE
 echo 输入你的上网信息，每项信息输入后按回车即可下一步操作
 set /p User=拨号用的用户名(其实就是学号)：  
 set /p Password=拨号用的密码（如果不清楚请咨询网络中心）:  
@@ -42,18 +57,6 @@ echo.
 set /p Gateway=填写学校给你的网关地址(格式X.X.X.X):  
 checkIP.bat %Gateway%|findstr error && goto _IP_OK || goto _GATEWAY_OK
 :_GATEWAY_OK
-echo.
-echo 提示：脚本将会把你连接路由的网卡设置IP，DNS为自动获得
-pause
-call ChangeIP.bat 2
-echo 提示：已经将你连接路由的网卡设置IP，DNS为自动获得
-pause
-:_PING
-echo.
-ping 192.168.1.1 -n 6
-IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto _FAIL )
-pause
-:_CONTINUE
 echo.
 echo 提示：准备telnet路由开通SSH，把密码改为%routerPasswd%,如果出现FATAL ERROR: Network error: Connection refused 也不用理会
 pause
@@ -104,7 +107,7 @@ echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./setup_ipk root@192.168.1.1:/tmp/
 echo 提示：准备在路由执行commands.sh脚本
 pause
 echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/setup_ipk/commands.sh && chmod 755 /tmp/setup_ipk/commands.sh && /tmp/setup_ipk/commands.sh"
-echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等如下网页能访问就代表启动完成了
+echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等弹出的网页能访问就代表启动完成了
 echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause
 explorer  "http://192.168.1.1/cgi-bin/luci/admin/scut/scut"
