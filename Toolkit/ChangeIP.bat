@@ -43,6 +43,7 @@ wmic nicconfig where index=%_index% call setgateways(192.168.1.1),(1) | findstr 
 wmic nicconfig where index=%_index% call SetDNSServerSearchOrder(202.112.17.33,114.114.114.114) | findstr "ReturnValue = 0;" && goto END || goto FAIL
 :END
 echo 脚本成功更改当前网卡设置
-exit
+goto END
 :FAIL
 echo 脚本无法设置当前网卡设置，请右键该脚本以管理员运行再来一次或者自己切换网卡为自动获得
+:END
