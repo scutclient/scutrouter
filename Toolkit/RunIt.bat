@@ -22,12 +22,6 @@ echo.&echo =========================================================
 echo 	本脚本由#华工路由器正式群#提供
 echo 	注意：登陆路由器密码必须为%routerPasswd%，否则必然失败
 echo.&echo =========================================================
-echo.
-echo 提示：脚本将会把你连接路由的网卡设置IP，DNS为自动获得（如果不成功，那就自己设置有线网卡为自动获得后再次执行该脚本）
-pause
-call ChangeIP.bat 2
-echo 提示：已经将你连接路由的网卡设置IP，DNS为自动获得
-pause
 :_PING
 ping OpenWrt
 IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto NO_OPENWRT )
@@ -134,7 +128,7 @@ echo 电脑与路由没连通，请检查
 echo 1.路由没通电
 echo 2.网线松了，坏了质量不过关
 echo 3.路由是坏的
-echo 4.可能路由器密码不是%routerPasswd%，按新手教程密码专题更改路由器密码为%routerPasswd%
+echo 4.可能路由器密码不是admin，按新手教程密码专题更改路由器密码为admin
 echo 5.改了密码还不行可能路由器的固件有问题，按新手教程刷一把固件，还不行再截图群里问。
 pause
 goto _EXITFAIL
