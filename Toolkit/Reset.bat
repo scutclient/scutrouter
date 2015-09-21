@@ -1,4 +1,4 @@
-@echo off & setlocal enabledelayedexpansion
+@echo off
 color 21
 TITLE 一键还原路由器脚本  --华工路由器正式群出品
 set routerPasswd=admin
