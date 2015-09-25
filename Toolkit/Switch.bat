@@ -27,6 +27,7 @@ echo 提示：该脚本作为1.3版本无法登录的情况，针对已经升级过的宿舍而制作，优先使用
 echo 提示：该脚本作为1.3版本无法登录的情况，针对已经升级过的宿舍而制作，优先使用1.3
 echo.
 echo 提示：脚本将会把你连接路由的网卡设置IP，DNS为自动获得（如果不成功，那就自己设置有线网卡为自动获得后再次执行该脚本）
+echo 如果下面列表里出现一个TAP-Win32 XX VXX的东西，那个不是你有线网卡，有线网卡一般带Intel、Realtek、Atheros、Nvidia、Broadcom、Marvell等厂商字样
 pause
 call ChangeIP.bat 2
 echo 提示：已经将你连接路由的网卡设置IP，DNS为自动获得
@@ -125,11 +126,7 @@ pause
 echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./switch root@192.168.1.1:/tmp/ | findstr 100% && echo OK || goto _FAIL
 echo 提示：准备在路由执行commands.sh脚本
 pause
-for /f "tokens=1,2 delims=:" %%i in ('time/t') do (
-	set hour=%%i
-	set min=%%j
-)
-echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "date %date:~0,4%.%date:~5,2%.%date:~8,2%-%hour%:%min%:%time:~-5,2% && sed -i 's/\r//g;' /tmp/switch/commands.sh && chmod 755 /tmp/switch/commands.sh && /tmp/switch/commands.sh"
+echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/switch/commands.sh && chmod 755 /tmp/switch/commands.sh && /tmp/switch/commands.sh"
 echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等弹出的网页能访问就代表启动完成了
 echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause

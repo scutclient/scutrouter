@@ -5,7 +5,7 @@ echo.
 for /f "skip=1 tokens=1,* delims= " %%a in ('wmic nic where AdapterTypeId^="0" get name^,Index') do ( if "%%b" == "" ( @echo off ) else (set /A N+=1&set _!N!INDEX=%%a&call echo.[!N!] %%b %%a) )
 echo.
 IF !N! EQU 1 set /A input=1&goto _DEVICE_OK
-set /p input=选择你本人电脑的有线网卡
+set /p input=选择你本人电脑的有线网卡(注意是输入列表序号“[]”里面的数字):
 :_DEVICE_OK
 set /A _index=!_%input%INDEX!
 
@@ -23,7 +23,7 @@ if %var%==3 echo 设置192.168.1.X & goto _ChangeIP3
 
 :_ChangeIP1
 set /p yourAddress=填写你提供给学校的IP地址  
-set /p yourMask=填写你提供给学校的子网源码
+set /p yourMask=填写你提供给学校的子网掩码
 set /p yourGateway=填写你提供给学校的网关地址 
  
 wmic nicconfig where index=%_index% call enablestatic "%yourAddress%","%yourMask%" | findstr "ReturnValue = 0;" && goto IP_OK || goto FAIL

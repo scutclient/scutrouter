@@ -24,6 +24,7 @@ echo 	注意：登陆路由器密码必须为%routerPasswd%，否则必然失败
 echo.&echo =========================================================
 echo.
 echo 提示：脚本将会把你连接路由的网卡设置IP，DNS为自动获得（如果不成功，那就自己设置有线网卡为自动获得后再次执行该脚本）
+echo 如果下面列表里出现一个TAP-Win32 XX VXX的东西，那个不是你有线网卡，有线网卡一般带Intel、Realtek、Atheros、Nvidia、Broadcom、Marvell等厂商字样
 pause
 call ChangeIP.bat 2
 echo 提示：已经将你连接路由的网卡设置IP，DNS为自动获得
@@ -122,11 +123,7 @@ pause
 echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./setup_ipk root@192.168.1.1:/tmp/ | findstr 100% && echo OK || goto _FAIL
 echo 提示：准备在路由执行commands.sh脚本
 pause
-for /f "tokens=1,2 delims=:" %%i in ('time/t') do (
-	set hour=%%i
-	set min=%%j
-)
-echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "date %date:~0,4%.%date:~5,2%.%date:~8,2%-%hour%:%min%:%time:~-5,2% && sed -i 's/\r//g;' /tmp/setup_ipk/commands.sh && chmod 755 /tmp/setup_ipk/commands.sh && /tmp/setup_ipk/commands.sh"
+echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/setup_ipk/commands.sh && chmod 755 /tmp/setup_ipk/commands.sh && /tmp/setup_ipk/commands.sh"
 echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等弹出的网页能访问就代表启动完成了
 echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause
@@ -137,7 +134,7 @@ goto _EXIT
 echo 电脑与路由没连通，请检查
 echo 1.路由没通电
 echo 2.网线松了，坏了质量不过关
-echo 3.路由是坏的
+echo 3.路由是坏的,或者你试试关掉这个脚本窗口，重启路由器3分钟后重新开这个脚本试试
 echo 4.可能路由器密码不是%routerPasswd%，按新手教程密码专题更改路由器密码为%routerPasswd%
 echo 5.改了密码还不行可能路由器的固件有问题，按新手教程刷一把固件，还不行再截图群里问。
 pause
@@ -152,7 +149,7 @@ pause
 exit
 
 :_EXITFAIL
-echo 有时候设置失败退出脚本重新来一次试试，不行就按新手教程指引刷固件
+echo 有时候设置失败退出脚本，重启路由器3分钟后重新开这个脚本试试，还是无法执行请按新手教程里头的刷固件办法，刷下固件。
 cd.>%~dp0setup_ipk\commands.sh
 echo 提示：已经清除敏感信息
 pause
