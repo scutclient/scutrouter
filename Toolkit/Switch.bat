@@ -112,6 +112,7 @@ echo uci set scutclient.@scutclient[0].username='%User%'>> %~dp0switch\commands.
 echo uci set scutclient.@scutclient[0].password='%Password%'>> %~dp0switch\commands.sh
 echo uci commit>> %~dp0switch\commands.sh
 echo echo sleep 30 ^> /etc/rc.local>> %~dp0switch\commands.sh
+echo echo killall scutclient^>^> /etc/rc.local>> %~dp0switch\commands.sh
 echo echo scutclient %User% %Password% \^& ^>^> /etc/rc.local>> %~dp0switch\commands.sh
 echo echo sleep 30 ^>^> /etc/rc.local>> %~dp0switch\commands.sh
 echo echo ntpd -n -d -p s2g.time.edu.cn ^>^> /etc/rc.local>> %~dp0switch\commands.sh
@@ -130,14 +131,14 @@ echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/s
 echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等弹出的网页能访问就代表启动完成了
 echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause
-explorer  "http://192.168.1.1/cgi-bin/luci/admin/scut/scut"
+explorer  "http://192.168.1.1/cgi-bin/luci/admin/network/scutclient"
 goto _EXIT
 
 :_FAIL
 echo 电脑与路由没连通，请检查
 echo 1.路由没通电
 echo 2.网线松了，坏了质量不过关
-echo 3.路由是坏的
+echo 3.路由是坏的,或者你试试关掉这个脚本窗口，重启路由器3分钟后重新开这个脚本试试
 echo 4.可能路由器密码不是%routerPasswd%，按新手教程密码专题更改路由器密码为%routerPasswd%
 echo 5.改了密码还不行可能路由器的固件有问题，按新手教程刷一把固件，还不行再截图群里问。
 pause
@@ -152,7 +153,7 @@ pause
 exit
 
 :_EXITFAIL
-echo 有时候设置失败退出脚本重新来一次试试，不行就按新手教程指引刷固件
+echo 有时候设置失败退出脚本，重启路由器3分钟后重新开这个脚本试试，还是无法执行请按新手教程里头的刷固件办法，刷下固件。
 cd.>%~dp0switch\commands.sh
 echo 提示：已经清除敏感信息
 pause

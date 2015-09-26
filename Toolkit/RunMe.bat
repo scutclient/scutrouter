@@ -109,6 +109,7 @@ echo uci set scutclient.@scutclient[0].username='%User%'>> %~dp0setup_ipk\comman
 echo uci set scutclient.@scutclient[0].password='%Password%'>> %~dp0setup_ipk\commands.sh
 echo uci commit>> %~dp0setup_ipk\commands.sh
 echo echo sleep 30 ^> /etc/rc.local>> %~dp0setup_ipk\commands.sh
+echo echo killall scutclient^>^> /etc/rc.local>> %~dp0switch\commands.sh
 echo echo scutclient %User% %Password% \^& ^>^> /etc/rc.local>> %~dp0setup_ipk\commands.sh
 echo echo sleep 30 ^>^> /etc/rc.local>> %~dp0setup_ipk\commands.sh
 echo echo ntpd -n -d -p s2g.time.edu.cn ^>^> /etc/rc.local>> %~dp0setup_ipk\commands.sh
@@ -127,7 +128,7 @@ echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/s
 echo 提示：自动配置成功，请现在拔路由器电源然后再插上(重启路由)，等弹出的网页能访问就代表启动完成了
 echo 以后换帐号，换ip,MAC等等情况都可以使用%routerPasswd%进入页面可以进行拨号等等相关设置，本脚本已经完成使命
 pause
-explorer  "http://192.168.1.1/cgi-bin/luci/admin/scut/scut"
+explorer  "http://192.168.1.1/cgi-bin/luci/admin/network/scutclient"
 goto _EXIT
 
 :_FAIL
