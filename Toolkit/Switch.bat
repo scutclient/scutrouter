@@ -22,9 +22,9 @@ echo 	±¾½Å±¾ÓÉ#»ª¹¤Â·ÓÉÆ÷ÕıÊ½Èº#Ìá¹©
 echo 	×¢Òâ£ºµÇÂ½Â·ÓÉÆ÷ÃÜÂë±ØĞëÎª%routerPasswd%£¬·ñÔò±ØÈ»Ê§°Ü
 echo.&echo =========================================================
 echo.
-echo ÌáÊ¾£º¸Ã½Å±¾×÷Îª1.3°æ±¾ÎŞ·¨µÇÂ¼µÄÇé¿ö£¬Õë¶ÔÒÑ¾­Éı¼¶¹ıµÄËŞÉá¶øÖÆ×÷£¬ÓÅÏÈÊ¹ÓÃ1.3
-echo ÌáÊ¾£º¸Ã½Å±¾×÷Îª1.3°æ±¾ÎŞ·¨µÇÂ¼µÄÇé¿ö£¬Õë¶ÔÒÑ¾­Éı¼¶¹ıµÄËŞÉá¶øÖÆ×÷£¬ÓÅÏÈÊ¹ÓÃ1.3
-echo ÌáÊ¾£º¸Ã½Å±¾×÷Îª1.3°æ±¾ÎŞ·¨µÇÂ¼µÄÇé¿ö£¬Õë¶ÔÒÑ¾­Éı¼¶¹ıµÄËŞÉá¶øÖÆ×÷£¬ÓÅÏÈÊ¹ÓÃ1.3
+echo ÌáÊ¾£º¸Ã½Å±¾×÷Îª1.3°æ±¾ÎŞ·¨µÇÂ¼µÄÇé¿ö²ÅÉı¼¶1.4.4°æ±¾£¬Õë¶ÔÒÑ¾­Éı¼¶¹ıµÄËŞÉá¶øÖÆ×÷£¬ÓÅÏÈÊ¹ÓÃ1.3
+echo ÌáÊ¾£º¸Ã½Å±¾×÷Îª1.3°æ±¾ÎŞ·¨µÇÂ¼µÄÇé¿ö²ÅÉı¼¶1.4.4°æ±¾£¬Õë¶ÔÒÑ¾­Éı¼¶¹ıµÄËŞÉá¶øÖÆ×÷£¬ÓÅÏÈÊ¹ÓÃ1.3
+echo ÌáÊ¾£º¸Ã½Å±¾×÷Îª1.3°æ±¾ÎŞ·¨µÇÂ¼µÄÇé¿ö²ÅÉı¼¶1.4.4°æ±¾£¬Õë¶ÔÒÑ¾­Éı¼¶¹ıµÄËŞÉá¶øÖÆ×÷£¬ÓÅÏÈÊ¹ÓÃ1.3
 echo.
 echo ÌáÊ¾£º½Å±¾½«»á°ÑÄãÁ¬½ÓÂ·ÓÉµÄÍø¿¨ÉèÖÃIP£¬DNSÎª×Ô¶¯»ñµÃ£¨Èç¹û²»³É¹¦£¬ÄÇ¾Í×Ô¼ºÉèÖÃÓĞÏßÍø¿¨Îª×Ô¶¯»ñµÃºóÔÙ´ÎÖ´ĞĞ¸Ã½Å±¾£©
 echo Èç¹ûÏÂÃæÁĞ±íÀï³öÏÖÒ»¸öTAP-Win32 XX VXXµÄ¶«Î÷£¬ÄÇ¸ö²»ÊÇÄãÓĞÏßÍø¿¨£¬ÓĞÏßÍø¿¨Ò»°ã´øIntel¡¢Realtek¡¢Atheros¡¢Nvidia¡¢Broadcom¡¢MarvellµÈ³§ÉÌ×ÖÑù
@@ -41,42 +41,9 @@ echo ¸ÃÏµÍ³¿ÉÄÜÎª·ÇOPENWRT¹Ù·½ÏµÍ³£¨»òÕßÊÇ²»ÊÇÓÃOpenWrt×öÖ÷»úÃû£©£¬²»ÊÊÒË¼ÌĞøÖ´Ğ
 pause
 echo.
 ping -a 192.168.1.1
-IF %errorlevel% EQU 0 ( goto _CONTINUE ) else ( goto _FAIL )
-:_CONTINUE
-echo ÊäÈëÄãµÄÉÏÍøĞÅÏ¢£¬Ã¿ÏîĞÅÏ¢ÊäÈëºó°´»Ø³µ¼´¿ÉÏÂÒ»²½²Ù×÷
-set /p User=²¦ºÅÓÃµÄÓÃ»§Ãû(ÆäÊµ¾ÍÊÇÑ§ºÅ)£º  
-set /p Password=²¦ºÅÓÃµÄÃÜÂë£¨Èç¹û²»Çå³şÇë×ÉÑ¯ÍøÂçÖĞĞÄ£©:  
-set /p SSID=Äã×Ô¼ºÏëÒªµÄµÄWIFIÃû×Ö£¨Ö»ÄÜÓ¢ÎÄ»òÕßÊı×Ö¸ú·ûºÅ»ì´î£©:  
-set /p Key=Â·ÓÉÆ÷µÄWIFIÃÜÂë£¨×îÉÙ8Î»£¬Ö»ÄÜÓ¢ÎÄ»òÕßÊı×Ö¸ú·ûºÅ»ì´î£©:  
-:MAC_LOOP
-echo.&echo ¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı¡ı
-echo.&echo  Ñ¡ÔñÒªÓ¦ÓÃµ½Â·ÓÉÆ÷µÄMAC£¬Çë¸ù¾İÄãÔÚÑ§Ğ£µÇ¼ÇÇé¿öÑ¡ÔñÏàÓ¦µÄMACµØÖ·
-set /A N=0
-for /f "skip=1 tokens=1,* delims= " %%a in ('wmic nic where AdapterTypeId^="0" get name^,macaddress') do ( if "%%b" == "" ( @echo off ) else (set /A N+=1&set _!N!MAC=%%a&call echo.[!N!] %%b %%a) )
-set /A N+=1
-echo [%N%] ²»ÊÇÓÃÕâ¸öµçÄÔÔÚÑ§Ğ£µÇ¼ÇµÄ£¬ÒªÌîÆäËûMACµØÖ·£¨¸ñÊ½´óĞ´×ÖÄ¸XX:XX:XX:XX:XX:XX)  
-echo.&echo ¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü
-echo.
-set /p input=Ñ¡ÔñÉÏÃæÒªÓ¦ÓÃµÄMACµØÖ·£¬ÊäÈëÁĞ±íĞòºÅÖĞµÄÊı×Ö¾ÍĞĞ£¬Èç¹û¶¼Ã»ÓĞÇëÑ¡Ôñ[%N%]:
-IF %input% EQU %N% (goto DIY_MAC) ELSE (set MACaddress=!_%input%MAC! & goto MAC_END)
-:DIY_MAC
-echo.
-set /p MACaddress=ÌîĞ´ÄãÌá¹©¸øÑ§Ğ£µÄMACµØÖ·,ÇĞÓ¢ÎÄ×´Ì¬ÊäÈë·¨ÊäÈë:  
-:MAC_END
-checkMAC.bat %MACaddress%|findstr error && goto MAC_LOOP || goto _MAC_OK
-:_MAC_OK
-echo.
-set /p IPaddress=ÌîĞ´Ñ§Ğ£¸øÄãµÄIPµØÖ·(¸ñÊ½X.X.X.X):  
-checkIP.bat %IPaddress%|findstr error && goto _MAC_OK || goto _IP_OK
-:_IP_OK
-echo.
-set /p Mask=ÌîĞ´Ñ§Ğ£¸øÄãµÄ×ÓÍøÑÚÂë(¸ñÊ½X.X.X.X):  
-checkIP.bat %Mask%|findstr error && goto _IP_OK || goto _MASK_OK
-:_MASK_OK
-echo.
-set /p Gateway=ÌîĞ´Ñ§Ğ£¸øÄãµÄÍø¹ØµØÖ·(¸ñÊ½X.X.X.X):  
-checkIP.bat %Gateway%|findstr error && goto _IP_OK || goto _GATEWAY_OK
-:_GATEWAY_OK
+IF %errorlevel% EQU 0 ( goto _OK ) else ( goto _FAIL )
+
+:_OK
 echo.
 echo ÌáÊ¾£º×¼±¸telnetÂ·ÓÉ¿ªÍ¨SSH£¬°ÑÃÜÂë¸ÄÎª%routerPasswd%,Èç¹û³öÏÖFATAL ERROR: Network error: Connection refused Ò²²»ÓÃÀí»á
 pause
@@ -93,32 +60,17 @@ echo uci set system.@system[0].hostname='SCUT'>> %~dp0switch\commands.sh
 echo uci set system.@system[0].timezone='HKT-8'>> %~dp0switch\commands.sh
 echo uci set system.@system[0].zonename='Asia/Hong Kong'>> %~dp0switch\commands.sh
 echo uci set luci.languages.zh_cn='chinese'>> %~dp0switch\commands.sh
-echo uci set network.wan.macaddr='%MACaddress%'>> %~dp0switch\commands.sh
 echo uci set network.wan.proto='static'>> %~dp0switch\commands.sh
-echo uci set network.wan.ipaddr='%IPaddress%'>> %~dp0switch\commands.sh
-echo uci set network.wan.netmask='%Mask%'>> %~dp0switch\commands.sh
-echo uci set network.wan.gateway='%Gateway%'>> %~dp0switch\commands.sh
 echo uci set network.wan.dns='202.112.17.33 114.114.114.114'>> %~dp0switch\commands.sh
 echo uci set wireless.@wifi-device[0].disabled='0'>> %~dp0switch\commands.sh
 echo uci set wireless.@wifi-iface[0].mode='ap'>> %~dp0switch\commands.sh
-echo uci set wireless.@wifi-iface[0].ssid='%SSID%'>> %~dp0switch\commands.sh
 echo uci set wireless.@wifi-iface[0].encryption='psk2'>> %~dp0switch\commands.sh
-echo uci set wireless.@wifi-iface[0].key='%Key%'>> %~dp0switch\commands.sh
 echo uci set scutclient.@option[0].boot='1'>> %~dp0switch\commands.sh
 echo uci set scutclient.@option[0].enable='1'>> %~dp0switch\commands.sh
 echo uci set scutclient.@scutclient[0]='scutclient'>> %~dp0switch\commands.sh
-echo uci set scutclient.@scutclient[0].interface=$(uci get network.wan.ifname)>> %~dp0switch\commands.sh
-echo uci set scutclient.@scutclient[0].username='%User%'>> %~dp0switch\commands.sh
-echo uci set scutclient.@scutclient[0].password='%Password%'>> %~dp0switch\commands.sh
 echo uci commit>> %~dp0switch\commands.sh
-echo echo sleep 30 ^> /etc/rc.local>> %~dp0switch\commands.sh
-echo echo killall scutclient^>^> /etc/rc.local>> %~dp0switch\commands.sh
-echo echo scutclient %User% %Password% \^& ^>^> /etc/rc.local>> %~dp0switch\commands.sh
-echo echo sleep 30 ^>^> /etc/rc.local>> %~dp0switch\commands.sh
-echo echo ntpd -n -d -p s2g.time.edu.cn ^>^> /etc/rc.local>> %~dp0switch\commands.sh
-echo echo exit 0 ^>^> /etc/rc.local>> %~dp0switch\commands.sh
 echo echo 01 06 * * 1-5 killall scutclient ^> /etc/crontabs/root>> %~dp0switch\commands.sh
-echo echo 05 06 * * 1-5 scutclient %User% %Password% \^& ^>^> /etc/crontabs/root>> %~dp0switch\commands.sh
+echo echo 05 06 * * 1-5 scutclient \$\(uci get scutclient.@scutclient[0].username\) \$\(uci get scutclient.@scutclient[0].password\) \^& ^>^> /etc/crontabs/root>> %~dp0switch\commands.sh
 echo echo 00 12 * * 0-7 ntpd -n -d -p s2g.time.edu.cn ^>^> /etc/crontabs/root>> %~dp0switch\commands.sh
 echo reboot>> %~dp0switch\commands.sh
 echo.
@@ -131,7 +83,7 @@ echo y|plink -P 22 -pw %routerPasswd% root@192.168.1.1 "sed -i 's/\r//g;' /tmp/s
 echo ÌáÊ¾£º×Ô¶¯ÅäÖÃ³É¹¦£¬ÇëÏÖÔÚ°ÎÂ·ÓÉÆ÷µçÔ´È»ºóÔÙ²åÉÏ(ÖØÆôÂ·ÓÉ)£¬µÈµ¯³öµÄÍøÒ³ÄÜ·ÃÎÊ¾Í´ú±íÆô¶¯Íê³ÉÁË
 echo ÒÔºó»»ÕÊºÅ£¬»»ip,MACµÈµÈÇé¿ö¶¼¿ÉÒÔÊ¹ÓÃ%routerPasswd%½øÈëÒ³Ãæ¿ÉÒÔ½øĞĞ²¦ºÅµÈµÈÏà¹ØÉèÖÃ£¬±¾½Å±¾ÒÑ¾­Íê³ÉÊ¹Ãü
 pause
-explorer  "http://192.168.1.1/cgi-bin/luci/admin/network/scutclient"
+explorer  "http://192.168.1.1/cgi-bin/luci/admin/scutclient"
 goto _EXIT
 
 :_FAIL
