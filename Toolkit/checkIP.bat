@@ -1,5 +1,4 @@
 @echo off 
-:begin 
 set input=%1
 echo %input%|findstr "^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*$">nul||goto fail 
 set _input=%input:.= % 
