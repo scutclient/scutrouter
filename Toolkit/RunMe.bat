@@ -59,21 +59,24 @@ echo uci set system.@system[0].zonename='Asia/Hong Kong'>> %~dp0setup_ipk\init.s
 echo uci set luci.languages.zh_cn='chinese'>> %~dp0setup_ipk\init.scut
 echo uci set network.wan.proto='static'>> %~dp0setup_ipk\init.scut
 echo uci set network.wan.dns='202.112.17.33 114.114.114.114'>> %~dp0setup_ipk\init.scut
-echo uci set network.lan.ip6addr='2001:250:3000:::/48'>> %~dp0setup_ipk\init.scut
+echo uci set network.lan.ip6addr='fc00:100:100:1::1/64'>> %~dp0setup_ipk\init.scut
 echo uci set wireless.@wifi-device[0].disabled='0'>> %~dp0setup_ipk\init.scut
 echo uci set wireless.@wifi-iface[0].mode='ap'>> %~dp0setup_ipk\init.scut
 echo uci set wireless.@wifi-iface[0].encryption='psk2'>> %~dp0setup_ipk\init.scut
 echo uci set scutclient.@option[0].boot='0'>> %~dp0setup_ipk\init.scut
 echo uci set scutclient.@option[0].enable='1'>> %~dp0setup_ipk\init.scut
 echo uci set scutclient.@scutclient[0]='scutclient'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.wan.ra='server'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.wan.dhcpv6='server'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.wan.ndp='relay'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.wan.ra_management='1'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.wan.ra_default='1'>> %~dp0setup_ipk\init.scut
+echo uci set dhcp.lan.ra='server'>> %~dp0setup_ipk\init.scut
+echo uci set dhcp.lan.dhcpv6='server'>> %~dp0setup_ipk\init.scut
+echo uci set dhcp.lan.ra_management='1'>> %~dp0setup_ipk\init.scut
+echo uci set dhcp.lan.ra_default='1'>> %~dp0setup_ipk\init.scut
+echo uci del dhcp.lan.ndp>> %~dp0setup_ipk\init.scut
 echo uci del network.globals>> %~dp0setup_ipk\init.scut
 echo uci commit>> %~dp0setup_ipk\init.scut
-echo echo ip6tables -t nat -I POSTROUTING -s 2001:250:3000:::/48 -j MASQUERADE ^> /etc/firewall.user>> %~dp0setup_ipk\init.scut
+echo echo ip6tables -t nat -A POSTROUTING -o $^(uci get network.wan.ifname^) -j MASQUERADE^>/etc/firewall.user>> %~dp0setup_ipk\init.scut
+echo echo sleep 120^>/etc/rc.local>> %~dp0setup_ipk\init.scut
+echo echo route -A inet6 add default gw ^"$^(ifconfig $^(uci get network.wan.ifname^) ^| grep Scope:Global ^| cut -d ' ' -f 13 ^| cut -d : -f 1-4^)::1^"^>^>/etc/rc.local>> %~dp0setup_ipk\init.scut
+echo echo exit 0^>^>/etc/rc.local>> %~dp0setup_ipk\init.scut
 echo echo 01 06 * * 1-5 killall scutclient ^> /etc/crontabs/root>> %~dp0setup_ipk\init.scut
 echo echo 05 06 * * 1-5 scutclient \$\(uci get scutclient.@scutclient[0].username\) \$\(uci get scutclient.@scutclient[0].password\) \^& ^>^> /etc/crontabs/root>> %~dp0setup_ipk\init.scut
 echo echo 00 12 * * 0-7 ntpd -n -d -p s2g.time.edu.cn ^>^> /etc/crontabs/root>> %~dp0setup_ipk\init.scut
