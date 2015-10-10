@@ -1,0 +1,1 @@
+(echo admin && echo admin) > /tmp/pass.log && (passwd < /tmp/pass.log && rm -f /tmp/pass.log) && exit 

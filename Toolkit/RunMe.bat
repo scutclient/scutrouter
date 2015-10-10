@@ -42,47 +42,11 @@ IF %errorlevel% EQU 0 ( goto _OK ) else ( goto _FAIL )
 
 :_OK
 echo.
-echo 提示：准备telnet路由开通SSH，把密码改为%routerPasswd%,如果出现FATAL ERROR: Network error: Connection refused 也不用理会
+echo 提示：准备telnet路由开通SSH，把密码改为admin,如果出现FATAL ERROR: Network error: Connection refused 也不用理会
 pause
-echo (echo %routerPasswd% ^&^& echo %routerPasswd%) ^> pass.log ^&^& (passwd ^< pass.log ^&^& rm -f pass.log) ^&^& exit > telnet.scut
 type telnet.scut|plink -telnet root@192.168.1.1
-cd.>telnet.scut
 echo.
 echo 提示：准备传送setup_ipk文件夹到路由的/tmp/下面
-pause
-echo opkg remove luci-app-scutclient> %~dp0setup_ipk\init.scut
-echo opkg remove scutclient>> %~dp0setup_ipk\init.scut
-echo opkg install /tmp/setup_ipk/*.ipk>> %~dp0setup_ipk\init.scut
-echo uci set system.@system[0].hostname='SCUT'>> %~dp0setup_ipk\init.scut
-echo uci set system.@system[0].timezone='HKT-8'>> %~dp0setup_ipk\init.scut
-echo uci set system.@system[0].zonename='Asia/Hong Kong'>> %~dp0setup_ipk\init.scut
-echo uci set luci.languages.zh_cn='chinese'>> %~dp0setup_ipk\init.scut
-echo uci set network.wan.proto='static'>> %~dp0setup_ipk\init.scut
-echo uci set network.wan.dns='202.112.17.33 114.114.114.114'>> %~dp0setup_ipk\init.scut
-echo uci set network.lan.ip6addr='fc00:100:100:1::1/64'>> %~dp0setup_ipk\init.scut
-echo uci set wireless.@wifi-device[0].disabled='0'>> %~dp0setup_ipk\init.scut
-echo uci set wireless.@wifi-iface[0].mode='ap'>> %~dp0setup_ipk\init.scut
-echo uci set wireless.@wifi-iface[0].encryption='psk2'>> %~dp0setup_ipk\init.scut
-echo uci set scutclient.@option[0].boot='0'>> %~dp0setup_ipk\init.scut
-echo uci set scutclient.@option[0].enable='1'>> %~dp0setup_ipk\init.scut
-echo uci set scutclient.@scutclient[0]='scutclient'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.lan.ra='server'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.lan.dhcpv6='server'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.lan.ra_management='1'>> %~dp0setup_ipk\init.scut
-echo uci set dhcp.lan.ra_default='1'>> %~dp0setup_ipk\init.scut
-echo uci del dhcp.lan.ndp>> %~dp0setup_ipk\init.scut
-echo uci del network.globals>> %~dp0setup_ipk\init.scut
-echo uci commit>> %~dp0setup_ipk\init.scut
-echo echo ip6tables -t nat -A POSTROUTING -o $^(uci get network.wan.ifname^) -j MASQUERADE^>/etc/firewall.user>> %~dp0setup_ipk\init.scut
-echo echo sleep 120^>/etc/rc.local>> %~dp0setup_ipk\init.scut
-echo echo route -A inet6 add default gw ^"$^(ifconfig $^(uci get network.wan.ifname^) ^| grep Scope:Global ^| cut -d ' ' -f 13 ^| cut -d : -f 1-4^)::1^"^>^>/etc/rc.local>> %~dp0setup_ipk\init.scut
-echo echo exit 0^>^>/etc/rc.local>> %~dp0setup_ipk\init.scut
-echo echo 01 06 * * 1-5 killall scutclient ^> /etc/crontabs/root>> %~dp0setup_ipk\init.scut
-echo echo 05 06 * * 1-5 scutclient \$\(uci get scutclient.@scutclient[0].username\) \$\(uci get scutclient.@scutclient[0].password\) \^& ^>^> /etc/crontabs/root>> %~dp0setup_ipk\init.scut
-echo echo 00 12 * * 0-7 ntpd -n -d -p s2g.time.edu.cn ^>^> /etc/crontabs/root>> %~dp0setup_ipk\init.scut
-echo reboot>> %~dp0setup_ipk\init.scut
-echo.
-echo 提示：已经生成init.scut脚本
 pause
 echo y|pscp -scp -P 22 -pw %routerPasswd%  -r ./setup_ipk root@192.168.1.1:/tmp/ | findstr 100% && echo OK || goto _FAIL
 echo 提示：准备在路由执行init.scut脚本
@@ -105,16 +69,18 @@ pause
 goto _EXITFAIL
 
 :_EXIT
-cd.>%~dp0setup_ipk\init.scut
-echo 提示：已经清除敏感信息
 pause
+echo 能上网以后，可以使用浏览器进入http://192.168.1.1，使用密码%routerPasswd%登录路由网页界面慢慢摸索，可以切换中文。
 echo 按任意键结束本次设置过程，窗口自动关掉，或者等能上网了再关掉也行
 pause
 exit
 
 :_EXITFAIL
 echo 有时候设置失败退出脚本，重启路由器3分钟后重新开这个脚本试试，还是无法执行请按新手教程里头的刷固件办法，刷下固件。
-cd.>%~dp0setup_ipk\init.scut
-echo 提示：已经清除敏感信息
+pause
+exit
+
+:_EXITNOTFOUND
+echo 生成不了init.scut脚本文件，有可能被杀毒软件杀掉，请关闭或卸载杀毒软件再来一遍，如果还不行，试试换个电脑试试。
 pause
 exit

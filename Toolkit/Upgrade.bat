@@ -23,6 +23,9 @@ echo 	本脚本由#华工路由器正式群#提供
 echo 	注意：登陆路由器密码必须为%routerPasswd%，否则必然失败
 echo.&echo =========================================================
 echo.
+echo 提示：先把要刷的固件（.bin格式)放进.Toolkit/upgrade_bin/文件夹
+echo 提示：先把要刷的固件（.bin格式)放进.Toolkit/upgrade_bin/文件夹
+echo 提示：先把要刷的固件（.bin格式)放进.Toolkit/upgrade_bin/文件夹
 echo 提示：该脚本作为其他刷错固件无法使用的情况才升级固件
 echo 提示：该脚本作为其他刷错固件无法使用的情况才升级固件
 echo 提示：该脚本作为其他刷错固件无法使用的情况才升级固件
